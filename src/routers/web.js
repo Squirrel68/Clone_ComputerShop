@@ -15,10 +15,6 @@ const SiteController = require("./../apps/controllers/site");
 const AuthMiddleware = require("./../apps/middlewares/auth");
 const UploadMiddleware = require("./../apps/middlewares/upload");
 
-router.get("/test", TestController.test);
-router.get("/test1", TestController.test1);
-router.get("/test2", TestController.test2);
-
 // 1.1) Admin router
 router.get("/admin/login", AuthMiddleware.checkLogin, AuthController.getLogin);
 router.post(
