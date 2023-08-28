@@ -26,6 +26,9 @@ app.use("/static", express.static(`${__dirname}/../public`));
 app.set("views", `${__dirname}/views`);
 app.set("view engine", process.env.VIEW_ENGINE);
 
+// Share menu
+app.use(require("./middlewares/share"));
+
 // Router
 app.use(require(`${__dirname}/../routers/web.js`));
 module.exports = app;
