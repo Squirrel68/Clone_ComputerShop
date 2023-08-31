@@ -1,10 +1,20 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const session = require("express-session");
 const dotenv = require("dotenv");
 
 //dotenv
 dotenv.config({ path: `${__dirname}/../../config.env` });
+// CORS
+app.use(
+  cors({
+    origin: "http://lowandhight.pythonanywhere.com/",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 //Session
 app.set("trust proxy", 1); // trust first proxy
 app.use(
