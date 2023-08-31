@@ -47,7 +47,7 @@ class ChatBox {
     this.messages.push(msg1);
 
     //localhost:5000/predict
-    fetch("http://lowandhight.pythonanywhere.com/predict", {
+    fetch("https://lowandhight.pythonanywhere.com/predict", {
       method: "POST",
       body: JSON.stringify({ message: text1 }),
       mode: "cors",
