@@ -1,4 +1,7 @@
+const moment = require("moment");
+
 const CategoryModel = require("../models/category");
+const CommentModel = require("../models/comment");
 const ProductModel = require("../models/product");
 
 const home = async (req, res) => {
@@ -23,7 +26,21 @@ const category = async (req, res) => {
 const product = async (req, res) => {
   const { id } = req.params;
   const product = await ProductModel.findById(id);
-  res.render("site/product", { product });
+  const comments = await CommentModel.find({ prd_id: id }).sort({ _id: -1 });
+  res.render("site/product", { product, comments, moment });
+};
+const comment = async (req, res) => {
+  const { id } = req.params;
+  const { email, full_name, body } = req.body;
+  // console.log(email, full_name, body);
+  const comment = {
+    prd_id: id,
+    full_name,
+    email,
+    body,
+  };
+  await new CommentModel(comment).save();
+  res.redirect(req.path);
 };
 const search = (req, res) => {
   res.render("site/search");
@@ -39,6 +56,7 @@ module.exports = {
   home,
   category,
   product,
+  comment,
   search,
   cart,
   success,

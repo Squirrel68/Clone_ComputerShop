@@ -107,6 +107,7 @@ router.get(
 router.get("/", SiteController.home);
 router.get("/category-:slug.:id", SiteController.category);
 router.get("/product-:slug.:id", SiteController.product);
+router.post("/product-:slug.:id", SiteController.comment);
 router.get("/search", SiteController.search);
 router.get("/cart", SiteController.cart);
 router.get("/success", SiteController.success);
