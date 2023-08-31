@@ -7,13 +7,7 @@ const dotenv = require("dotenv");
 //dotenv
 dotenv.config({ path: `${__dirname}/../../config.env` });
 // CORS
-app.use(
-  cors({
-    origin: "http://lowandhight.pythonanywhere.com/",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors());
 
 //Session
 app.set("trust proxy", 1); // trust first proxy
