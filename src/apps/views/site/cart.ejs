@@ -9,86 +9,50 @@
                         <div class="cart-nav-item col-lg-2 col-md-2 col-sm-12">Tùy chọn</div>
                         <div class="cart-nav-item col-lg-3 col-md-3 col-sm-12">Giá</div>
                     </div>
-                    <form method="post">
-                        <div class="cart-item row">
-                            <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src="images/product-1.png">
-                                <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
+                    <form method="post" action="/update-cart">
+                        <%for(item of cart) {%>
+                            <div class="cart-item row">
+                                <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
+                                    <img src="../images/<%=item.img%>">
+                                    <h4>
+                                        <%=item.name%>
+                                    </h4>
+                                </div>
+                                <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
+                                    <input name="products[<%=item.id%>][qty]" type="number" id="quantity"
+                                        class="form-control form-blue quantity" value="<%=item.qty%>" min="1">
+                                </div>
+                                <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>
+                                        <%=new Intl.NumberFormat("vi-VN", { style: "currency" , currency: "VND" ,
+                                            minimumFractionDigits: 0, }).format(item.price*item.qty) %>
+                                    </b><a href="/del-cart-<%=item.id%>">Xóa</a>
+                                </div>
                             </div>
+                            <%}%>
 
-                            <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                                <input type="number" id="quantity" class="form-control form-blue quantity" value="1"
-                                    min="1">
-                            </div>
-                            <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a>
-                            </div>
-                        </div>
-                        <div class="cart-item row">
-                            <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src="images/product-2.png">
-                                <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                            </div>
-                            <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                                <input type="number" id="quantity" class="form-control form-blue quantity" value="1"
-                                    min="1">
-                            </div>
-                            <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a>
-                            </div>
-                        </div>
-                        <div class="cart-item row">
-                            <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src="images/product-3.png">
-                                <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                            </div>
-                            <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                                <input type="number" id="quantity" class="form-control form-blue quantity" value="1"
-                                    min="1">
-                            </div>
-                            <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a>
-                            </div>
-                        </div>
-                        <div class="cart-item row">
-                            <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src="images/product-4.png">
-                                <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                            </div>
-                            <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                                <input type="number" id="quantity" class="form-control form-blue quantity" value="1"
-                                    min="1">
-                            </div>
-                            <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a>
-                            </div>
-                        </div>
-                        <div class="cart-item row">
-                            <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <img src="images/product-5.png">
-                                <h4>iPhone Xs Max 2 Sim - 256GB Gold</h4>
-                            </div>
-                            <div class="cart-quantity col-lg-2 col-md-2 col-sm-12">
-                                <input type="number" id="quantity" class="form-control form-blue quantity" value="1"
-                                    min="1">
-                            </div>
 
-                            <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>32.990.000đ</b><a href="#">Xóa</a>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
-                                <button id="update-cart" class="btn btn-success" type="submit" name="sbm">Cập nhật giỏ
-                                    hàng</button>
-                            </div>
-                            <div class="cart-total col-lg-2 col-md-2 col-sm-12"><b>Tổng cộng:</b></div>
-                            <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>88.970.000đ</b></div>
-                        </div>
+                                <div class="row">
+                                    <div class="cart-thumb col-lg-7 col-md-7 col-sm-12">
+                                        <button id="update-cart" class="btn btn-success" type="submit" name="sbm">Cập
+                                            nhật giỏ
+                                            hàng</button>
+                                    </div>
+                                    <div class="cart-total col-lg-2 col-md-2 col-sm-12"><b>Tổng cộng:</b></div>
+                                    <div class="cart-price col-lg-3 col-md-3 col-sm-12"><b>
+                                            <%= new Intl.NumberFormat("vi-VN", { style: "currency" , currency: "VND" ,
+                                                minimumFractionDigits: 0, }).format( cart.reduce((total, item)=>
+                                                total+=item.price*item.qty, 0))
+                                                %>
+                                        </b></div>
+                                </div>
                     </form>
 
                 </div>
                 <!--	End Cart	-->
 
-                <!--	Customer Info	-->
+                <!--    	Customer Info  -->
                 <div id="customer">
-                    <form method="post">
+                    <form method="post" action="/order">
                         <div class="row">
 
                             <div id="customer-name" class="col-lg-4 col-md-4 col-sm-12">
@@ -109,22 +73,23 @@
                             </div>
 
                         </div>
+
+                        <div class="row">
+                            <div class="by-now col-lg-6 col-md-6 col-sm-12">
+                                <button type="submit" class="btn btn-danger">
+                                    <b>Mua ngay</b>
+                                    <span>Giao hàng tận nơi siêu tốc</span>
+                                </button>
+                            </div>
+                            <div class="by-now col-lg-6 col-md-6 col-sm-12">
+                                <button type="button" class="btn btn-primary">
+                                    <b>Trả góp Online</b>
+                                    <span>Vui lòng call (+84) 0988 550 553</span>
+                                </button>
+                            </div>
+                        </div>
                     </form>
-                    <div class="row">
-                        <div class="by-now col-lg-6 col-md-6 col-sm-12">
-                            <a href="#">
-                                <b>Mua ngay</b>
-                                <span>Giao hàng tận nơi siêu tốc</span>
-                            </a>
-                        </div>
-                        <div class="by-now col-lg-6 col-md-6 col-sm-12">
-                            <a href="#">
-                                <b>Trả góp Online</b>
-                                <span>Vui lòng call (+84) 0988 550 553</span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
-                <!--	End Customer Info	-->
+                <!--    	End Customer Info    	-->
 
                 <%- include("./layout/sidebar")%> <%- include("./layout/footer")%>

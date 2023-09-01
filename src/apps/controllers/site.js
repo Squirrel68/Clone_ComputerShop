@@ -1,4 +1,7 @@
 const moment = require("moment");
+const path = require("path");
+const ejs = require("ejs");
+const transporter = require("../../common/transporter");
 
 const CategoryModel = require("../models/category");
 const CommentModel = require("../models/comment");
@@ -42,11 +45,87 @@ const comment = async (req, res) => {
   await new CommentModel(comment).save();
   res.redirect(req.path);
 };
-const search = (req, res) => {
-  res.render("site/search");
+const search = async (req, res) => {
+  const keyword = req.query.keyword || "";
+  const filter = {};
+  if (keyword) {
+    filter.$text = {
+      $search: keyword,
+    };
+  }
+  const products = await ProductModel.find(filter);
+  res.render("site/search", { products, keyword });
 };
 const cart = (req, res) => {
-  res.render("site/cart");
+  const cart = req.session.cart;
+  res.render("site/cart", { cart });
+};
+const addToCart = async (req, res) => {
+  const { id, qty } = req.body;
+  let cart = req.session.cart;
+  let isProductExists = false;
+  cart.map((item) => {
+    if (item.id === id) {
+      item.qty += parseInt(qty);
+      isProductExists = true;
+    }
+    return item;
+  });
+  if (!isProductExists) {
+    const product = await ProductModel.findById(id);
+    cart.push({
+      id,
+      qty: parseInt(qty),
+      name: product.name,
+      price: product.price,
+      img: product.thumbnail,
+    });
+  }
+  req.session.cart = cart;
+  res.redirect("/cart");
+};
+const updateCart = (req, res) => {
+  const { products } = req.body;
+  let cart = req.session.cart;
+  // console.log(products);
+  cart.map((item) => {
+    return (item.qty = parseInt(products[item.id]["qty"]));
+  });
+  req.session.cart = cart;
+  res.redirect("/cart");
+};
+const delCart = (req, res) => {
+  const { id } = req.params;
+  let cart = req.session.cart;
+  const newCart = cart.filter((item) => {
+    return item.id != id;
+  });
+  req.session.cart = newCart;
+  res.redirect("/cart");
+};
+const order = async (req, res) => {
+  const { name, phone, mail, add } = req.body;
+  const items = req.session.cart;
+  // console.log(body);
+  // console.log(items);
+  const html = await ejs.renderFile(
+    path.join(req.app.get("views"), "site/order-mail.ejs"),
+    {
+      name,
+      phone,
+      mail,
+      add,
+      items,
+    }
+  );
+  await transporter.sendMail({
+    to: mail,
+    from: "Vietpro Shop",
+    subject: "Xác nhận đơn hàng từ VietPro Shop",
+    html,
+  });
+  req.session.cart = [];
+  res.redirect("/success");
 };
 const success = (req, res) => {
   res.render("site/success");
@@ -59,5 +138,9 @@ module.exports = {
   comment,
   search,
   cart,
+  addToCart,
+  updateCart,
+  delCart,
+  order,
   success,
 };

@@ -31,6 +31,7 @@ app.set("views", `${__dirname}/views`);
 app.set("view engine", process.env.VIEW_ENGINE);
 
 // Share menu
+app.use(require("./middlewares/cart"));
 app.use(require("./middlewares/share"));
 
 // Router
