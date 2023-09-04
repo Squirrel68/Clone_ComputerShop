@@ -1,4 +1,4 @@
-<%- include("../layout/head",{title: "Administrator Vietpro" } )%>
+<%- include("../layout/head",{title: "Thông tin sản phẩm" } )%>
     <%- include("../layout/header")%>
         <%- include("../layout/sidebar")%>
 
@@ -40,34 +40,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%for(product of products) { %>
-                                            <tr>
-                                                <td style="">1</td>
-                                                <td style="">
-                                                    <%=product.name%>
-                                                </td>
-                                                <td style="">
-                                                    <%=product.price%> vnd
-                                                </td>
-                                                <td style="text-align: center"><img width="130" height="180"
-                                                        src="/static/images/<%=product.thumbnail%>" /></td>
-                                                <td><span class="label <%=product.is_stock? " label-success"
-                                                        : "label-danger" %>">
-                                                        <%=product.is_stock? "Còn hàng" :"Hết hàng" %>
-                                                    </span></td>
-                                                <td>
-                                                    <%=product.cat_id.title%>
-                                                </td>
-                                                <td class="form-group">
-                                                    <a href="/admin/products/edit/<%=product._id%>"
-                                                        class="btn btn-primary"><i
-                                                            class="glyphicon glyphicon-pencil"></i></a>
-                                                    <a href="/admin/products/delete/<%=product._id%>"
-                                                        class="btn btn-danger"><i
-                                                            class="glyphicon glyphicon-remove"></i></a>
-                                                </td>
-                                            </tr>
-                                            <%}%>
+                                        <% var stt=skip+1%>
+                                            <%for(product of products) { %>
+                                                <tr>
+                                                    <td style="">
+                                                        <%=stt%>
+                                                    </td>
+                                                    <td style="">
+                                                        <%=product.name%>
+                                                    </td>
+                                                    <td style="">
+                                                        <%=new Intl.NumberFormat("vi-VN", { style: "currency" ,
+                                                            currency: "VND" , minimumFractionDigits: 0,
+                                                            }).format(product.price)%>
+                                                    </td>
+                                                    <td style="text-align: center"><img width="130" height="180"
+                                                            src="/static/images/<%=product.thumbnail[0]%>" /></td>
+                                                    <td><span class="label <%=product.is_stock? " label-success"
+                                                            : "label-danger" %>">
+                                                            <%=product.is_stock? "Còn hàng" :"Hết hàng" %>
+                                                        </span></td>
+                                                    <td>
+                                                        <%=product.cat_id.title%>
+                                                    </td>
+                                                    <td class="form-group">
+                                                        <a href="/admin/products/edit/<%=product._id%>"
+                                                            class="btn btn-primary"><i
+                                                                class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a href="/admin/products/delete/<%=product._id%>"
+                                                            class="btn btn-danger"><i
+                                                                class="glyphicon glyphicon-remove"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <%stt+=1;}%>
                                     </tbody>
                                 </table>
                             </div>

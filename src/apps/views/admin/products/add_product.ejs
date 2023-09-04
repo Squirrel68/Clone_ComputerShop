@@ -1,4 +1,4 @@
-<%- include("../layout/head",{title: "Administrator Vietpro" } )%>
+<%- include("../layout/head",{title: "Create Product" } )%>
     <%- include("../layout/header")%>
         <%- include("../layout/sidebar")%>
 
@@ -56,12 +56,10 @@
                                     <div class="form-group">
                                         <label>Ảnh sản phẩm</label>
 
-                                        <input required name="thumbnail" type="file">
-                                        <br>
-                                        <div>
-                                            <img src="img/download.jpeg">
-                                        </div>
+                                        <input onchange="uploadImages(this)" type="file" name="thumbnail"
+                                            id="imageUpload" multiple>
                                     </div>
+                                    <div id="imagePreview"></div>
                                     <div class="form-group">
                                         <label>Danh mục</label>
                                         <select name="cat_id" class="form-control">

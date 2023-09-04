@@ -6,6 +6,7 @@ const transporter = require("../../common/transporter");
 const CategoryModel = require("../models/category");
 const CommentModel = require("../models/comment");
 const ProductModel = require("../models/product");
+const paginate = require("../../common/paginate");
 
 const home = async (req, res) => {
   const featuredProducts = await ProductModel.find({
@@ -21,16 +22,49 @@ const home = async (req, res) => {
 };
 const category = async (req, res) => {
   const { id } = req.params;
-  const products = await ProductModel.find({ cat_id: id }).sort({ _id: -1 });
+  const limit = 9;
+  const page = parseInt(req.query.page) || 1;
+  const skip = page * limit - limit;
+  const products = await ProductModel.find({ cat_id: id })
+    .skip(skip)
+    .sort({ _id: -1 })
+    .limit(limit);
+
+  const total = await ProductModel.find({ cat_id: id }).countDocuments();
+  const totalPage = Math.ceil(total / limit);
   const title = (await CategoryModel.find({ _id: id }))[0].title;
-  const total = products.length;
-  res.render("site/category", { products, title, total });
+  res.render("site/category", {
+    products,
+    title,
+    total,
+    pages: paginate(page, totalPage, 1),
+    page,
+    id,
+    totalPage,
+  });
 };
 const product = async (req, res) => {
   const { id } = req.params;
   const product = await ProductModel.findById(id);
-  const comments = await CommentModel.find({ prd_id: id }).sort({ _id: -1 });
-  res.render("site/product", { product, comments, moment });
+  // paginate Comment
+  const limit = 3;
+  const page = parseInt(req.query.page) || 1;
+  const skip = page * limit - limit;
+  const totalRow = await CommentModel.find({ prd_id: id }).countDocuments();
+  const totalPage = Math.ceil(totalRow / limit);
+  const comments = await CommentModel.find({ prd_id: id })
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(limit);
+  res.render("site/product", {
+    product,
+    comments,
+    moment,
+    page,
+    pages: paginate(page, totalPage),
+    totalPage,
+    id,
+  });
 };
 const comment = async (req, res) => {
   const { id } = req.params;
@@ -46,6 +80,12 @@ const comment = async (req, res) => {
   res.redirect(req.path);
 };
 const search = async (req, res) => {
+  //paginate
+  const limit = 9;
+  const page = parseInt(req.query.page) || 1;
+  const skip = page * limit - limit;
+
+  //search
   const keyword = req.query.keyword || "";
   const filter = {};
   if (keyword) {
@@ -53,8 +93,19 @@ const search = async (req, res) => {
       $search: keyword,
     };
   }
-  const products = await ProductModel.find(filter);
-  res.render("site/search", { products, keyword });
+  const products = await ProductModel.find(filter)
+    .sort({ _id: -1 })
+    .skip(skip)
+    .limit(limit);
+  const totalRow = await ProductModel.find(filter).countDocuments();
+  const totalPage = Math.ceil(totalRow / limit);
+  res.render("site/search", {
+    products,
+    keyword,
+    page,
+    pages: paginate(page, totalPage),
+    totalPage,
+  });
 };
 const cart = (req, res) => {
   const cart = req.session.cart;
@@ -78,7 +129,7 @@ const addToCart = async (req, res) => {
       qty: parseInt(qty),
       name: product.name,
       price: product.price,
-      img: product.thumbnail,
+      img: product.thumbnail[0],
     });
   }
   req.session.cart = cart;
@@ -120,8 +171,8 @@ const order = async (req, res) => {
   );
   await transporter.sendMail({
     to: mail,
-    from: "Vietpro Shop",
-    subject: "Xác nhận đơn hàng từ VietPro Shop",
+    from: "TMob",
+    subject: "Xác nhận đơn hàng từ TMob",
     html,
   });
   req.session.cart = [];

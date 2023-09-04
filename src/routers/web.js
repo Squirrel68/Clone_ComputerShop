@@ -43,7 +43,7 @@ router.get(
 router.post(
   "/admin/products/store",
   AuthMiddleware.checkAdmin,
-  UploadMiddleware.single("thumbnail"),
+  UploadMiddleware.array("thumbnail", 12),
   ProductController.store
 );
 router.get(
@@ -54,7 +54,7 @@ router.get(
 router.post(
   "/admin/products/update/:id",
   AuthMiddleware.checkAdmin,
-  UploadMiddleware.single("thumbnail"),
+  UploadMiddleware.array("thumbnail", 12),
   ProductController.update
 );
 router.get(

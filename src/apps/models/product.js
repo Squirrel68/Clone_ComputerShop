@@ -2,8 +2,8 @@ const mongoose = require("../../common/database")();
 const productSchema = mongoose.Schema(
   {
     thumbnail: {
-      type: String,
-      default: null,
+      type: Array,
+      default: [],
     },
     description: {
       type: String,

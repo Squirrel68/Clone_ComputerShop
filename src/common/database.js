@@ -9,8 +9,7 @@ const DB = process.env.DATABASE.replace(
 );
 
 module.exports = () => {
-  // console.log(DB);
-  mongoose.connect(DB);
-  // mongoose.connect(process.env.DATABASE_LOCAL);
+  // mongoose.connect(DB);
+  mongoose.connect(process.env.DATABASE_LOCAL);
   return mongoose;
 };

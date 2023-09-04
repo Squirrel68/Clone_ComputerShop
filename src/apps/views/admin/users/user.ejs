@@ -1,4 +1,4 @@
-<%- include("../layout/head",{title: "Administrator Vietpro" } )%>
+<%- include("../layout/head",{title: "Thông tin người dùng" } )%>
     <%- include("../layout/header")%>
         <%- include("../layout/sidebar")%>
 
@@ -18,7 +18,7 @@
                     </div>
                 </div><!--/.row-->
                 <div id="toolbar" class="btn-group">
-                    <a href="thanhvien-add.html" class="btn btn-success">
+                    <a href="/admin/users/create" class="btn btn-success">
                         <i class="glyphicon glyphicon-plus"></i> Thêm thành viên
                     </a>
                 </div>
@@ -38,41 +38,52 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td style="">1</td>
-                                            <td style="">Admin</td>
-                                            <td style="">admin@gmail.com</td>
-                                            <td><span class="label label-danger">Admin</span></td>
-                                            <td class="form-group">
-                                                <a href="thanhvien-edit.html" class="btn btn-primary"><i
-                                                        class="glyphicon glyphicon-pencil"></i></a>
-                                                <a href="/" class="btn btn-danger"><i
-                                                        class="glyphicon glyphicon-remove"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="">2</td>
-                                            <td style="">Nguyễn Văn A</td>
-                                            <td style="">nguyenvana@gmail.com</td>
-                                            <td><span class="label label-warning">Member</span></td>
-                                            <td class="form-group">
-                                                <a href="thanhvien-edit.html" class="btn btn-primary"><i
-                                                        class="glyphicon glyphicon-pencil"></i></a>
-                                                <a href="/" class="btn btn-danger"><i
-                                                        class="glyphicon glyphicon-remove"></i></a>
-                                            </td>
-                                        </tr>
+                                        <%var stt=skip+1%>
+                                            <%for(user of users){ %>
+                                                <tr>
+                                                    <td style="">
+                                                        <%=stt%>
+                                                    </td>
+                                                    <td style="">
+                                                        <%=user.full_name%>
+                                                    </td>
+                                                    <td style="">
+                                                        <%=user.email%>
+                                                    </td>
+                                                    <td><span
+                                                            class="label <%=user.role==='admin'? 'label-danger':'label-success'%>">
+                                                            <%=user.role%>
+                                                        </span></td>
+                                                    <td class="form-group">
+                                                        <a href="/admin/users/edit/<%=user.id%>"
+                                                            class="btn btn-primary"><i
+                                                                class="glyphicon glyphicon-pencil"></i></a>
+                                                        <a href="/" class="btn btn-danger"><i
+                                                                class="glyphicon glyphicon-remove"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <%stt+=1;}%>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="panel-footer">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
-                                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                        <%if(page>1) { %>
+                                            <li class="page-item"><a class="page-link"
+                                                    href="/admin/users?page=<%=page-1%>">&laquo;</a></li>
+                                            <%}%>
+                                                <%for(pageNum of pages) { %>
+                                                    <li class="page-item <%=pageNum===page?'active':'' %>"><a
+                                                            class="page-link" href="/admin/users?page=<%=pageNum%>">
+                                                            <%=pageNum%>
+                                                        </a></li>
+                                                    <%}%>
+                                                        <%if(page<totalPage) { %>
+                                                            <li class="page-item"><a class="page-link"
+                                                                    href="/admin/users?page=<%=page-1%>">&raquo;</a>
+                                                            </li>
+                                                            <%}%>
                                     </ul>
                                 </nav>
                             </div>

@@ -21,6 +21,7 @@ const index = async (req, res) => {
     page,
     pages: paginate(page, totalPage),
     totalPage,
+    skip,
   });
 };
 const create = async (req, res) => {
@@ -28,7 +29,7 @@ const create = async (req, res) => {
   res.render("admin/products/add_product", { categories });
 };
 const store = (req, res) => {
-  const { file, body } = req;
+  const { files, body } = req;
   const product = {
     // thumbnail:,
     name: body.name,
@@ -43,9 +44,14 @@ const store = (req, res) => {
     featured: body.featured == "yes",
     slug: slug(body.name),
   };
-  if (file) {
-    const thumbnail = "products/" + file.originalname;
-    fs.renameSync(file.path, path.resolve("src/public/images", thumbnail));
+  const thumbnail = [];
+  if (files) {
+    for (let file of files) {
+      const img = "products/" + file.originalname;
+      fs.renameSync(file.path, path.resolve("src/public/images/" + img));
+      thumbnail.push(img);
+    }
+    // console.log(thumbnail);
     product["thumbnail"] = thumbnail;
     new ProductModel(product).save();
     res.redirect("/admin/products");
@@ -61,7 +67,7 @@ const edit = async (req, res) => {
 };
 const update = async (req, res) => {
   const { id } = req.params;
-  const { file, body } = req;
+  const { files, body } = req;
   const product = {
     name: body.name,
     price: body.price,
@@ -75,10 +81,14 @@ const update = async (req, res) => {
     featured: body.featured == "yes",
     slug: slug(body.name),
   };
-  if (file) {
-    const thumbnail = "products/" + file.originalname;
-    fs.renameSync(file.path, path.resolve("src/public/images", thumbnail));
-    product["thumbnail"] = thumbnail;
+  if (files) {
+    const thumbnail = [];
+    for (let file of files) {
+      const img = "products/" + file.originalname;
+      fs.renameSync(file.path, path.resolve("src/public/images/" + img));
+      thumbnail.push(img);
+      product["thumbnail"] = thumbnail;
+    }
   }
   await ProductModel.updateOne({ _id: id }, { $set: product });
   res.redirect("/admin/products");

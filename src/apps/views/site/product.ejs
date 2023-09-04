@@ -1,4 +1,4 @@
-<%- include("./layout/head", {title: "Cart" }) %>
+<%- include("./layout/head", {title: product.name }) %>
     <%- include("./layout/header") %> <%- include("./layout/menu") %>
             <%- include("./layout/slider") %>
 
@@ -6,7 +6,31 @@
                 <div id="product">
                     <div id="product-head" class="row">
                         <div id="product-img" class="col-lg-6 col-md-6 col-sm-12">
-                            <img src="../images/<%=product.thumbnail%>">
+                            <div class="product-main-m-img">
+                                <div class="big-img-holder">
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <% var str="a" ; for(let image of product.thumbnail) { %>
+                                            <div class="tab-pane fade <%=str=='a'?'show active':''%>" id="<%=str%>"
+                                                role="tabpanel">
+                                                <a href=""><img src="/static/images/<%=image%>" alt=""></a>
+                                            </div>
+                                            <% str=str + "a" } %>
+
+                                    </div>
+                                </div>
+                                <div class="img-group">
+                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        <% var string="a" ; for(let image of product.thumbnail) {%>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link <%=string=='a'?'active':''%>" data-toggle="pill"
+                                                    data-target="#<%=string%>" type="button" role="tab"><img
+                                                        class="img-fluid" src="/static/images/<%=image%>"
+                                                        alt=""></button>
+                                            </li>
+                                            <% string=string + "a" ; } %>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                         <div id="product-details" class="col-lg-6 col-md-6 col-sm-12">
                             <h1>
@@ -27,7 +51,8 @@
                                 </li>
                                 <li id="price">Giá Bán (chưa bao gồm VAT)</li>
                                 <li id="price-number">
-                                    <%=product.price%>đ
+                                    <%=new Intl.NumberFormat("vi-VN", { style: "currency" , currency: "VND" ,
+                                        minimumFractionDigits: 0, }).format(product.price)%>
                                 </li>
                                 <li id="status" class='<%= product.is_stock? "": " text text-danger"%>'>
                                     <%=product.is_stock?"Còn hàng":"Hết hàng"%>
@@ -109,5 +134,23 @@
                     <!--	End Comments List	-->
                 </div>
                 <!--	End Product	-->
-
+                <div id="pagination">
+                    <ul class="pagination">
+                        <%if(page>1) { %>
+                            <li class="page-item"><a class="page-link"
+                                    href="/product-<%=product.name%>.<%=id%>?page=<%=page-1%>">&laquo;</a></li>
+                            <%}%>
+                                <%for(pageNum of pages) { %>
+                                    <li class="page-item <%=pageNum===page?'active':'' %>"><a class="page-link"
+                                            href="/product-<%=product.name%>.<%=id%>?page=<%=pageNum%>">
+                                            <%=pageNum%>
+                                        </a></li>
+                                    <%}%>
+                                        <%if(page<totalPage) { %>
+                                            <li class="page-item"><a class="page-link"
+                                                    href="/product-<%=product.name%>.<%=id%>?page=<%=page-1%>">&raquo;</a>
+                                            </li>
+                                            <%}%>
+                    </ul>
+                </div>
                 <%- include("./layout/sidebar")%> <%- include("./layout/footer")%>
