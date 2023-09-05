@@ -9,7 +9,8 @@ const DB = process.env.DATABASE.replace(
 );
 
 module.exports = () => {
-  mongoose.connect(DB);
-  // mongoose.connect(process.env.DATABASE_LOCAL);
+  if (process.env.NODE_ENV === "development")
+    mongoose.connect(process.env.DATABASE_LOCAL);
+  else mongoose.connect(DB);
   return mongoose;
 };
