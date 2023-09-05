@@ -41,7 +41,7 @@ const store = (req, res) => {
     cat_id: body.cat_id,
     is_stock: body.is_stock,
     description: body.description,
-    featured: body.featured == "yes",
+    featured: body.featured === "yes",
     slug: slug(body.name),
   };
   const thumbnail = [];
@@ -78,7 +78,7 @@ const update = async (req, res) => {
     cat_id: body.cat_id,
     is_stock: body.is_stock,
     description: body.description,
-    featured: body.featured == "yes",
+    featured: body.featured === "yes",
     slug: slug(body.name),
   };
   if (files) {

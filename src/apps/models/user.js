@@ -10,9 +10,14 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    passwordConfirm: {
+      type: String,
+      require: true,
+    },
     role: {
       type: String,
-      required: true,
+      enum: ["admin", "member"],
+      default: "member",
     },
     full_name: {
       type: String,

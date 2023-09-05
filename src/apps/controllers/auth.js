@@ -9,10 +9,12 @@ const postLogin = async (req, res) => {
   const users = await UserModel.find({ email, password });
   if (email == "" || password == "") {
     error = "Email hoặc Mật khẩu không được để trống!";
-  } else if (users.length > 0) {
+  } else if (users.length > 0 && users[0].role === "admin") {
     // cap quyen
     req.session.email = email;
     req.session.password = password;
+    req.session.role = users[0].role;
+    // console.log(req.session.role);
     res.redirect("/admin/dashboard");
   } else {
     error = "Tài khoản không hợp lệ!";

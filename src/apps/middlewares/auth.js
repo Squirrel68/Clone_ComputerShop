@@ -11,7 +11,18 @@ const checkAdmin = (req, res, next) => {
   }
   next();
 };
+
+const restrictTo = (role) => {
+  return (req, res, next) => {
+    if (req.session.role != role) {
+      res.redirect("/admin/login");
+    }
+    next();
+  };
+};
+
 module.exports = {
   checkLogin,
+  restrictTo,
   checkAdmin,
 };

@@ -70,10 +70,20 @@ router.get(
   AuthMiddleware.checkAdmin,
   UserController.create
 );
+router.post(
+  "/admin/users/store",
+  AuthMiddleware.checkAdmin,
+  UserController.store
+);
 router.get(
   "/admin/users/edit/:id",
   AuthMiddleware.checkAdmin,
   UserController.edit
+);
+router.post(
+  "/admin/users/update/:id",
+  AuthMiddleware.checkAdmin,
+  UserController.update
 );
 router.get(
   "/admin/users/delete/:id",
@@ -92,10 +102,20 @@ router.get(
   AuthMiddleware.checkAdmin,
   CategoryController.create
 );
+router.post(
+  "/admin/categories/store",
+  AuthMiddleware.checkAdmin,
+  CategoryController.store
+);
 router.get(
   "/admin/categories/edit/:id",
   AuthMiddleware.checkAdmin,
   CategoryController.edit
+);
+router.post(
+  "/admin/categories/update/:id",
+  AuthMiddleware.checkAdmin,
+  CategoryController.update
 );
 router.get(
   "/admin/categories/delete/:id",
