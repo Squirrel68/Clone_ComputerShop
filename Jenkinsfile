@@ -2,10 +2,6 @@ pipeline {
     agent {
         label 'dev-server'
     }
-pipeline {
-    agent {
-        label 'lab-server'
-    }
     environment {
         appUser = "computer"
         appName = "computer-app"
@@ -24,6 +20,4 @@ pipeline {
             }
         }
     }
-}
-
 }
