@@ -37,8 +37,9 @@ pipeline {
             steps {
                 sh """
                     echo "Deploying new version..."
-                    rm -rf ${deployDir}
-                    mkdir -p ${deployDir}
+                    sudo rm -rf ${deployDir}
+                    sudo mkdir -p ${deployDir}
+                    sudo chown -R jenkins:jenkins ${deployDir}
                     cp -r * ${deployDir}
                     cd ${deployDir}
                     ${createEnvFile}
