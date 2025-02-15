@@ -6,19 +6,19 @@ pipeline {
         appUser = "computer"
         appName = "computer-app"
         buildScript = "npm install"
-        runScript = "npm start"
-        createEnvFile = "echo 'DATABASE=mongodb+srv://constantlypeaceinside:tZ1buG5ZEI4t7jH2@cluster0.q3ydroc.mongodb.net/tmobile  SESSION_KEY=secretkey  VIEW_ENGINE=ejs' > config.env"
+        runScript = "nohup npm start &"
+        createEnvFile = "echo -e 'DATABASE=mongodb+srv://constantlypeaceinside:tZ1buG5ZEI4t7jH2@cluster0.q3ydroc.mongodb.net/tmobile\\nSESSION_KEY=secretkey\\nVIEW_ENGINE=ejs' > config.env"
     }
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                sh(script: """ ${buildScript} """, label: "build with npm")
+                sh(script: """ ${buildScript} """, label: "Install dependencies")
             }
         }
-        stage('deploy') {
+        stage('Deploy') {
             steps {
-                sh(script: """ ${createEnvFile} """, label: "create .env file")
-                sh(script: """ ${runScript} """, label: "run with npm")
+                sh(script: """ ${createEnvFile} """, label: "Create .env file")
+                sh(script: """ ${runScript} """, label: "Start application")
             }
         }
     }
