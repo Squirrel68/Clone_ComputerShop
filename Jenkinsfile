@@ -7,7 +7,7 @@ pipeline {
         appName = "computer-app"
         buildScript = "npm install"
         runScript = "npm start"
-        createEnvFile = "echo 'DATABASE=mongodb+srv://constantlypeaceinside:tZ1buG5ZEI4t7jH2@cluster0.q3ydroc.mongodb.net/tmobile  SESSION_KEY=secretkey  VIEW_ENGINE=ejs' > .env"
+        createEnvFile = "echo 'DATABASE=mongodb+srv://constantlypeaceinside:tZ1buG5ZEI4t7jH2@cluster0.q3ydroc.mongodb.net/tmobile  SESSION_KEY=secretkey  VIEW_ENGINE=ejs' > config.env"
     }
     stages {
         stage('build') {
