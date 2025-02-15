@@ -6,8 +6,8 @@ pipeline {
         appUser = "computer"
         appName = "computer-app"
         buildScript = "npm install"
-        runScript = "nohup npm start &"
-        createEnvFile = "echo -e 'DATABASE=mongodb+srv://constantlypeaceinside:tZ1buG5ZEI4t7jH2@cluster0.q3ydroc.mongodb.net/tmobile\\nSESSION_KEY=secretkey\\nVIEW_ENGINE=ejs' > config.env"
+        runScript = "npm start"
+        createEnvFile = "echo -e 'PORT=6868\\nDATABASE=mongodb+srv://constantlypeaceinside:tZ1buG5ZEI4t7jH2@cluster0.q3ydroc.mongodb.net/tmobile\\nSESSION_KEY=secretkey\\nVIEW_ENGINE=ejs' > config.env"
     }
     stages {
         stage('Build') {
